@@ -1,36 +1,14 @@
 <?php
-/**
- * PHP library for handling styles and scripts; Add, minify, unify and print.
- *
- * @author    Josantonius <hello@josantonius.com>
- * @copyright 2016 - 2018 (c) Josantonius - PHP-Assets
- * @license   https://opensource.org/licenses/MIT - The MIT License (MIT)
- * @link      https://github.com/Josantonius/PHP-Asset
- * @since     1.0.0
- */
-namespace Josantonius\Asset;
 
-use Josantonius\Json\Json;
-
-/**
- * Load assets resources.
- *
- * @since 1.0.0
- */
-class Asset
-{
+class Asset {
     /**
      * Settings to register styles or scripts.
-     *
-     * @since 1.1.5
      *
      * @var array
      */
     public static $data = [];
     /**
      * Unique identifier for unified file.
-     *
-     * @since 1.1.5
      *
      * @var string
      */
@@ -39,16 +17,12 @@ class Asset
     /**
      * Files saved information.
      *
-     * @since 1.1.5
-     *
      * @var array
      */
     protected static $files;
 
     /**
      * True if file is outdated.
-     *
-     * @since 1.1.5
      *
      * @var bool
      */
@@ -57,16 +31,12 @@ class Asset
     /**
      * Unify files.
      *
-     * @since 1.1.5
-     *
      * @var string|bool
      */
     protected static $unify = false;
 
     /**
      * Minify files.
-     *
-     * @since 1.1.5
      *
      * @var bool
      */
@@ -84,8 +54,6 @@ class Asset
 
     /**
      * Add scripts or styles.
-     *
-     * @since 1.1.5
      *
      * @param string $type → script|style
      * @param array  $data → settings
@@ -106,8 +74,6 @@ class Asset
     /**
      * Output stylesheet.
      *
-     * @since 1.1.5
-     *
      * @param string $output → output for styles
      *
      * @return string|false → output or false
@@ -117,13 +83,15 @@ class Asset
         self::lookIfProcessFiles('style', 'header');
 
         $template = self::$templates['style'];
-        $styles = self::$data['style']['header'];
+        $styles = @self::$data['style']['header'];
 
-        foreach ($styles as $value) {
-            $output .= sprintf(
-                $template,
-                $value['url']
-            );
+        if(is_array($styles)){
+            foreach ($styles as $value) {
+                $output .= sprintf(
+                    $template,
+                    $value['url']
+                );
+            }
         }
 
         self::$data['style']['header'] = [];
@@ -133,8 +101,6 @@ class Asset
 
     /**
      * Output scripts.
-     *
-     * @since 1.1.5
      *
      * @param string $place  → header|footer
      * @param string $output → output for scripts
@@ -146,14 +112,16 @@ class Asset
         self::lookIfProcessFiles('script', $place);
 
         $template = self::$templates['script'];
-        $scripts = self::$data['script'][$place];
+        $scripts = @self::$data['script'][$place];
 
-        foreach ($scripts as $value) {
-            $output .= sprintf(
-                $template,
-                $value['attr'],
-                $value['url']
-            );
+        if(is_array($scripts)){
+            foreach ($scripts as $value) {
+                $output .= sprintf(
+                    $template,
+                    $value['attr'],
+                    $value['url']
+                );
+            }
         }
 
         self::$data['script'][$place] = [];
@@ -163,8 +131,6 @@ class Asset
 
     /**
      * Check if a particular style or script has been added.
-     *
-     * @since 1.1.5
      *
      * @param string $type → script|style
      * @param string $name → script or style name
@@ -184,8 +150,6 @@ class Asset
 
     /**
      * Sets whether to merge the content of files into a single file.
-     *
-     * @since 1.1.5
      *
      * @param string $uniqueID → unique identifier for unified file
      * @param mixed  $params   → path urls
@@ -230,8 +194,6 @@ class Asset
     /**
      * Set parameters.
      *
-     * @since 1.1.5
-     *
      * @param string $type → script|style
      * @param array  $data → settings
      *
@@ -261,8 +223,6 @@ class Asset
     /**
      * Look whether to process files to minify or unify files.
      *
-     * @since 1.1.5
-     *
      * @param string $type  → script|style
      * @param string $place → header|footer
      *
@@ -279,8 +239,6 @@ class Asset
 
     /**
      * Check files and prepare paths and urls.
-     *
-     * @since 1.1.5
      *
      * @param string $type  → script|style
      * @param string $place → header|footer
@@ -327,8 +285,6 @@ class Asset
     /**
      * Get path|url to the minimized file.
      *
-     * @since 1.1.5
-     *
      * @param string $type → scripts|styles
      *
      * @return array → url|path to minimized file
@@ -344,8 +300,6 @@ class Asset
 
     /**
      * Obtain information from processed files.
-     *
-     * @since 1.1.5
      */
     protected static function getProcessedFiles()
     {
@@ -354,8 +308,6 @@ class Asset
 
     /**
      * Get path from url.
-     *
-     * @since 1.1.5
      *
      * @param string $url → file url
      *
@@ -368,8 +320,6 @@ class Asset
 
     /**
      * Check if the file was modified.
-     *
-     * @since 1.1.5
      *
      * @param string $filepath → path of the file
      *
@@ -392,8 +342,6 @@ class Asset
     /**
      * Check if it matches the file hash.
      *
-     * @since 1.1.5
-     *
      * @param string $url  → external url
      * @param string $path → internal file path
      *
@@ -413,8 +361,6 @@ class Asset
     /**
      * Check if it's an external file.
      *
-     * @since 1.1.5
-     *
      * @param string $url → file url
      *
      * @return bool
@@ -426,8 +372,6 @@ class Asset
 
     /**
      * Unify files.
-     *
-     * @since 1.1.5
      *
      * @param array  $params → paths and urls of files to unify
      * @param string $data   → initial string
@@ -465,8 +409,6 @@ class Asset
     /**
      * Save external file.
      *
-     * @since 1.1.5
-     *
      * @param string $url  → external url
      * @param string $path → internal file path
      *
@@ -483,8 +425,6 @@ class Asset
 
     /**
      * File minifier.
-     *
-     * @since 1.1.5
      *
      * @author powerbuoy (https://github.com/powerbuoy)
      *
@@ -509,8 +449,6 @@ class Asset
     /**
      * Save file.
      *
-     * @since 1.1.5
-     *
      * @param string $path → internal file path
      * @param string $data → file content
      *
@@ -525,8 +463,6 @@ class Asset
 
     /**
      * Create directory where external/unified/minimized files will be saved.
-     *
-     * @since 1.1.5
      *
      * @param string $url → path of the file
      *
@@ -545,8 +481,6 @@ class Asset
 
     /**
      * Set information from processed files.
-     *
-     * @since 1.1.5
      */
     protected static function setProcessedFiles()
     {
@@ -557,8 +491,6 @@ class Asset
 
     /**
      * Set new parameters for the unified file.
-     *
-     * @since 1.1.5
      *
      * @param string $type      → script|style
      * @param string $place     → header|footer
@@ -588,8 +520,6 @@ class Asset
 
     /**
      * Obtain all the parameters of a particular field and unify them.
-     *
-     * @since 1.1.5
      *
      * @param string $type    → script|style
      * @param string $field   → field to unify
